@@ -368,7 +368,7 @@ summary(egos_graph[[1]])
 ```
 
 ```
-*## IGRAPH eb7d46d DN-B 19 47 -- 
+*## IGRAPH 20c1913 DN-B 19 47 -- 
 ## + attr: name (v/c), .egoID (v/c), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
 ## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
 ## | (e/n)
@@ -392,7 +392,7 @@ summary(alters_graph[[1]])
 ```
 
 ```
-*## IGRAPH ef0a935 DN-B 18 29 -- 
+*## IGRAPH 4a233a8 DN-B 18 29 -- 
 ## + attr: name (v/c), .egoID (v/n), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
 ## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
 ## | (e/n)
@@ -437,7 +437,7 @@ class: center, middle
 # Network Stats
 
 ---
-# Ego's Network Order 
+## Order 
 The order of the graph is the number of vertices
 
 ```r
@@ -447,7 +447,7 @@ egos$ego$net_order = map_dbl(alters_graph,gorder)
 ![](assignment_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 ---
-# Ego's Network Size 
+## Size 
 The size of the graph is the number of edges
 
 ```r
@@ -457,7 +457,7 @@ egos$ego$net_size = map_dbl(alters_graph,gsize)
 ![](assignment_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
-# Ego's Density Histogram
+## Ego's Density Histogram
 The density of a graph is the ratio of the number of edges and the number of possible edges.
 
 
@@ -469,7 +469,7 @@ egos$ego$net_density = ego_density(egos, directed=T)
 
 
 ---
-# Transitivity 
+## Transitivity 
 
 Measures the probability that the adjacent vertices of a vertex are connected. This is sometimes also called the Clustering Coefficient.
 
@@ -501,7 +501,7 @@ egos$ego["net_assortativity"] = map_dbl(alters_graph, assortativity_degree)
 ![](assignment_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ---
-# Summary of network stats
+## Summary of Network Stats
 
 ```r
 egos$ego %&gt;%
@@ -857,6 +857,7 @@ learners = list(
                )
 ```
 --
+### Summary
 &lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
@@ -920,22 +921,22 @@ bmr = benchmark(learners = learners,
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.glm &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 10716 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10171 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.svm &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 13247 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13468 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.cforest &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 15274 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15140 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.nnet &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 21168 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 21307 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
