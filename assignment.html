@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Ego Networks in GitHub</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alan Coyne Christian Aguilar" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Ego Networks in GitHub
+## Social Network Analysis
+### Alan Coyne<br>Christian Aguilar<br>
+### TUD - 2019<br>
+
+---
+
+class: center, middle
+
+&lt;STYLE TYPE="text/css"&gt;
+&lt;!--
+  table { 
+    font-family: "Verdana"; 
+  }
+---&gt;
+&lt;/STYLE&gt;
+
+
+
+
+
+
+
+
+
+# Github
+
+GitHub is a code hosting platform for version control and collaboration.
+
+---
+## Repositories
+A repository is the most basic element of GitHub. It contains all of the project files and stores each file's revision history. Repositories can have multiple collaborators and can be either public or private.
+--
+![img](libs/images/img2.png)
+
+---
+## Users
+Each user has a personal profile, and can own multiple repositories, public or private.
+
+--
+![img](libs/images/img1.png)
+
+---
+## Contributors
+A contributor is a user that doesn't belong to the core development team of the project that wants to contribute with some changes.
+--
+![img](libs/images/img3.png)
+
+---
+## Followers
+A user can follow another user
+--
+![img](libs/images/img4.png)
+
+---
+class: center, middle
+# Hypothesis testing
+
+---
+## Hypothesis testing
+
+### Null Hypothesis
+&gt; Repo's contributors network properties are not good predictors of repo's popularity
+
+
+--
+### Alternative Hypothesis
+&gt; Repo's contributors network properties are good predictors of repo's popularity
+
+
+---
+class: center, middle
+# Egor library
+
+---
+## Creating Ego Network 
+
+```r
+egos = egor(
+         egos    = read_csv("repos.csv"),
+         alters  = read_csv("contributors.csv"),
+         aaties  = read_csv("followers.csv"),
+         ID.vars = list(
+             ego    = "repo_id",
+             alter  = "user_id",
+             source = "src_user_id",
+             target = "tgt_user_id"
+         )
+       )
+
+summary(egos)
+```
+
+```
+## 90 Egos/ Ego Networks 
+##   Alters 
+## Average Netsize 1025 
+## 
+## Ego sampling design:
+##   NULL
+## Alter survey design:
+##   Maximum nominations:
+```
+
+
+---
+## Ego Table
+
+```r
+head(egos$ego) %&gt;% 
+  select(c(1:8)) %&gt;%
+  to_kabble()
+```
+
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; .egoID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; full_name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; owner_login &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; owner_id &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; size &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; forks &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; stars &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; refined-github &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sindresorhus/refined-github &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sindresorhus &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 170270 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7694 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 779 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10273 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 18193978 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; got &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sindresorhus/got &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sindresorhus &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 170270 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1897 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 365 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6373 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 14440270 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; You-Dont-Know-JS &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; getify/You-Dont-Know-JS &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; getify &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150330 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8285 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 22552 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 112658 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8575137 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; butterknife &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; JakeWharton/butterknife &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; JakeWharton &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 66577 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3833 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4680 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 24887 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 212659 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; php-code-coverage &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sebastianbergmann/php-code-coverage &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sebastianbergmann &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 25218 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4828 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 300 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6996 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2206953 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; commander.js &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; tj/commander.js &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; tj &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 25254 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1048 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1179 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 16699 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+## Alter table
+
+```r
+head(egos$alter) %&gt;% 
+  select(c(1:8)) %&gt;%
+  to_kabble()
+```
+
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; .altID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; .egoID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; login &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; full_name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; public_repos &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; public_gists &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; followers &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1402241 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; fregante &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; fregante &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Federico Brigante &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 100 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 34 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 475 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 170270 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sindresorhus &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sindresorhus &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Sindre Sorhus &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1023 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 78 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 35636 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 53252526 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; bfred-it &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; bfred-it &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 506129 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; hkdobrev &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; hkdobrev &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Haralan Dobrev &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 162 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 21 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 157 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 857700 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; busches &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; busches &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Scott Busche &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 65 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 19 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 37769974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; notlmn &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; notlmn &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Laxman &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 37 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 41 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+## Alter-Atler Ties table
+
+```r
+head(egos$aatie) %&gt;% 
+  to_kabble()
+```
+
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; .egoID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; .srcID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; .tgtID &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1402241 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 170270 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1402241 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 506129 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1402241 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4331946 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 170270 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1402241 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 170270 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 737065 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 506129 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1402241 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+class: center, middle
+# IGraph library
+
+
+---
+## Egos graph
+
+```r
+egos_graph = egos %&gt;%
+             as_igraph(
+               directed = T, 
+               include.ego = T, 
+               ego.attrs=c(1,2,3)
+             ) %&gt;%
+             map(function(g){
+               V(g)[name=="ego"]$type = 1
+               V(g)[name=="ego"]$name = V(g)[name=="ego"]$full_name
+               g
+             })
+```
+--
+
+```r
+summary(egos_graph[[1]])
+```
+
+```
+*## IGRAPH eb7d46d DN-B 19 47 -- 
+## + attr: name (v/c), .egoID (v/c), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
+## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
+## | (e/n)
+```
+
+
+---
+## Alters graph 
+
+```r
+alters_graph = as_igraph(
+                  egos, 
+                  directed = T, 
+                  include.ego = F
+                )
+```
+--
+
+```r
+summary(alters_graph[[1]])
+```
+
+```
+*## IGRAPH ef0a935 DN-B 18 29 -- 
+## + attr: name (v/c), .egoID (v/n), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
+## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
+## | (e/n)
+```
+
+
+
+
+
+---
+class: center, middle
+# Visualization
+
+
+---
+## Ego Network Visualization
+--
+![](assignment_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+
+---
+## Alters Network Visualization
+--
+![](assignment_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+
+
+
+
+---
+## Community detection
+Plots below show the fast greedy modularity optimization algorithm for finding community structure
+--
+![](assignment_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+
+
+
+
+---
+class: center, middle
+# Network Stats
+
+---
+# Ego's Network Order 
+The order of the graph is the number of vertices
+
+```r
+egos$ego$net_order = map_dbl(alters_graph,gorder)
+```
+--
+![](assignment_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+---
+# Ego's Network Size 
+The size of the graph is the number of edges
+
+```r
+egos$ego$net_size = map_dbl(alters_graph,gsize)
+```
+--
+![](assignment_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+---
+# Ego's Density Histogram
+The density of a graph is the ratio of the number of edges and the number of possible edges.
+
+
+```r
+egos$ego$net_density = ego_density(egos, directed=T)
+```
+--
+![](assignment_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+
+---
+# Transitivity 
+
+Measures the probability that the adjacent vertices of a vertex are connected. This is sometimes also called the Clustering Coefficient.
+
+```r
+egos$ego$net_transitivity = map_dbl(alters_graph,transitivity,type="global")
+```
+--
+![](assignment_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+---
+## Reciprocity
+Reciprocity defines the proportion of mutual connections, in a directed graph.
+
+```r
+egos$ego["net_reciprocity"] = map_dbl(alters_graph,reciprocity)
+```
+--
+![](assignment_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+
+---
+## Homophyly
+The assortativity coefficient measures the level of homophyly of the graph, in this case using the vertex degree.
+
+```r
+egos$ego["net_assortativity"] = map_dbl(alters_graph, assortativity_degree)
+```
+--
+![](assignment_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+# Summary of network stats
+
+```r
+egos$ego %&gt;%
+  select(".egoID", starts_with("net_")) %&gt;%
+  head(12) %&gt;%
+  to_kabble()         
+```
+
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; .egoID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; net_order &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; net_size &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; net_density &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; net_transitivity &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; net_reciprocity &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; net_assortativity &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 51769689 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 29 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.09477 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.4779 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.3448 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.4135 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 18193978 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.22222 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.3913 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.8750 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.7169 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 14440270 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.01250 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NaN &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8575137 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.12500 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NaN &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 212659 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.12500 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.5455 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.2857 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.5446 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2206953 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.04487 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.5714 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.8677 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 817345 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.01307 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NaN &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 68957920 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.04286 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.3750 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.2222 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.2041 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 14098069 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.03333 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.5000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 60493101 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.01282 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NaN &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NaN &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 18964487 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.04412 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.1364 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.4256 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 121395510 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.01579 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.0000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.6325 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+class: center, middle
+# Modeling using MLR
+
+
+---
+## Data Preparation
+
+```r
+egos_data = egos$ego %&gt;%
+             select(-.egoID,
+                    -owner_id,
+                    -contributors,
+                    -top_contributors,
+                    -type, 
+*                   -net_transitivity,
+*                   -net_assortativity
+             ) %&gt;%
+*            select_if(is.numeric) %&gt;%
+*            #filter(net_size&gt;0) %&gt;%
+*            drop_na()
+```
+--
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; type &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; na &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; mean &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; disp &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; median &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; mad &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; min &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; max &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; nlevs &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; size &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.114e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.772e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.425e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.106e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.100e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.595e+05 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; forks &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.903e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.252e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.145e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.639e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.180e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.777e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stars &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.397e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.121e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.731e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.238e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.583e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.127e+05 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; open_issues &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.625e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.746e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7.900e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.008e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.823e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_order &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.209e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.592e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.100e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.965e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.000e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_size &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.065e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.543e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.965e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.900e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_density &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.283e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.032e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.167e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.353e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.762e-03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.778e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_reciprocity &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.335e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.330e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.000e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+## Regression Task
+
+```r
+regr.task = makeRegrTask(
+                data = egos_data, 
+*               target = "stars"
+            )
+```
+### Summary
+--
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; field &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; type &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; target &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stars &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; size &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 77 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n.feat.numerics &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n.feat.factors &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n.feat.ordered &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n.feat.functionals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; has.missings &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; FALSE &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; has.weights &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; FALSE &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; has.blocking &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; FALSE &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; has.coordinates &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; FALSE &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+## Learners
+
+```r
+learners = list(
+                makeLearner("regr.glm"),
+                makeLearner("regr.cforest"),
+                makeLearner("regr.nnet") ,
+                makeLearner("regr.svm")
+               )
+```
+--
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; id &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; type &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; package &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; regr.glm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Generalized Linear Regression &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stats &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; regr.cforest &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Random Forest Based on Conditional Inference Trees &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; party &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; regr.nnet &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Neural Network &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nnet &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; regr.svm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Support Vector Machines (libsvm) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; e1071 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+## Benchmark
+
+```r
+bmr = benchmark(learners = learners, 
+                tasks = regr.task, 
+*               resamplings = makeResampleDesc("CV", iters = 3),
+*               measures = rmse,
+                models = F,
+                show.info = F)
+```
+--
+### Results
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; task.id &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; learner.id &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; rmse.test.rmse &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr.glm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10716 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr.svm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13247 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr.cforest &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15274 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; regr.nnet &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 21168 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+## Training
+
+```r
+model = train(
+*       makeLearner("regr.glm"),
+        regr.task)
+```
+--
+### Results
+&lt;table class="table table-striped" style="font-size: 10px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; signif &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.490e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.620e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.2507 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.760e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; * &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; size &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.646e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.526e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.6514 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.169e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; forks &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.875e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.902e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15.1124 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.403e-23 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; *** &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; open_issues &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.646e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.407e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.3734 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7.100e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_order &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.291e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.183e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.0249 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.802e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_size &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.757e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.373e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.4017 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.891e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_density &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.030e+05 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.367e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.9200 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.899e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; . &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; net_reciprocity &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.693e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.418e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.6382 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.029e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; * &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+## Hypothesis Testing Result
+
+&gt; There is evidence to support rejecting the null hypothesis (p&lt;0.05) that repo's network properties are not good predictors of its popularity.
+
+---
+class: center, middle
+# END
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightLanguage": "r",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
