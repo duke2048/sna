@@ -368,10 +368,11 @@ summary(egos_graph[[1]])
 ```
 
 ```
-*## IGRAPH 20c1913 DN-B 19 47 -- 
-## + attr: name (v/c), .egoID (v/c), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
-## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
-## | (e/n)
+*## IGRAPH 571704c DN-B 19 47 -- 
+## + attr: name (v/c), .egoID (v/c), login (v/c), full_name (v/c),
+## | public_repos (v/n), public_gists (v/n), followers (v/n),
+## | followers_range (v/c), following (v/n), contributions (v/n),
+## | contributions_range (v/c), type (v/n), .egoID (e/n)
 ```
 
 
@@ -392,10 +393,11 @@ summary(alters_graph[[1]])
 ```
 
 ```
-*## IGRAPH 4a233a8 DN-B 18 29 -- 
-## + attr: name (v/c), .egoID (v/n), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
-## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
-## | (e/n)
+*## IGRAPH 6305540 DN-B 18 29 -- 
+## + attr: name (v/c), .egoID (v/n), login (v/c), full_name (v/c),
+## | public_repos (v/n), public_gists (v/n), followers (v/n),
+## | followers_range (v/c), following (v/n), contributions (v/n),
+## | contributions_range (v/c), type (v/n), .egoID (e/n)
 ```
 
 
@@ -457,7 +459,7 @@ egos$ego$net_size = map_dbl(alters_graph,gsize)
 ![](assignment_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
-## Ego's Density Histogram
+## Density
 The density of a graph is the ratio of the number of edges and the number of possible edges.
 
 
@@ -1035,7 +1037,7 @@ model = train(
 ---
 ## Hypothesis Testing Result
 
-&gt; There is evidence to support rejecting the null hypothesis (p&lt;0.05) that repo's network properties are not good predictors of its popularity.
+&gt; There is some evidence to support rejecting the null hypothesis (p&lt;0.05) that repo's network properties are not good predictors of its popularity.
 
 ---
 class: center, middle
