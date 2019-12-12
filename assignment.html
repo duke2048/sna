@@ -67,6 +67,19 @@ A user can follow another user
 ![img](libs/images/img4.png)
 
 ---
+## Data collection
+
+### Data source
+1. Top 200 users from gitstar ranking website
+2. For each user, select only the repos with stars&gt;1000  (Github API)
+3. For each repo, select the top 10% of contributors (Github API)
+
+### Ouptut files
+1. repos.csv - 90 records
+2. contributors.csv - 1067 records
+3. followers.csv - 467 records
+
+---
 class: center, middle
 # Hypothesis testing
 
@@ -74,12 +87,12 @@ class: center, middle
 ## Hypothesis testing
 
 ### Null Hypothesis
-&gt; Repo's contributors network properties are not good predictors of repo's popularity
+&gt; The properties of a github contributors network are useful predictors of a repos's popularity, as measured by the repos 'Star rating'
 
 
 --
 ### Alternative Hypothesis
-&gt; Repo's contributors network properties are good predictors of repo's popularity
+&gt; The properties of a github contributors network are not useful predictors of a repos's popularity, as measured by the repos 'Star rating'
 
 
 ---
@@ -345,6 +358,8 @@ class: center, middle
 # IGraph library
 
 
+
+
 ---
 ## Egos graph
 
@@ -368,12 +383,17 @@ summary(egos_graph[[1]])
 ```
 
 ```
-*## IGRAPH 571704c DN-B 19 47 -- 
-## + attr: name (v/c), .egoID (v/c), login (v/c), full_name (v/c),
-## | public_repos (v/n), public_gists (v/n), followers (v/n),
-## | followers_range (v/c), following (v/n), contributions (v/n),
-## | contributions_range (v/c), type (v/n), .egoID (e/n)
+*## IGRAPH ddab6d7 DN-B 19 47 -- 
+## + attr: name (v/c), .egoID (v/c), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
+## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
+## | (e/n)
 ```
+
+
+---
+## Ego Network Visualization
+--
+![](assignment_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -393,26 +413,11 @@ summary(alters_graph[[1]])
 ```
 
 ```
-*## IGRAPH 6305540 DN-B 18 29 -- 
-## + attr: name (v/c), .egoID (v/n), login (v/c), full_name (v/c),
-## | public_repos (v/n), public_gists (v/n), followers (v/n),
-## | followers_range (v/c), following (v/n), contributions (v/n),
-## | contributions_range (v/c), type (v/n), .egoID (e/n)
+*## IGRAPH 8678ef9 DN-B 18 29 -- 
+## + attr: name (v/c), .egoID (v/n), login (v/c), full_name (v/c), public_repos (v/n), public_gists (v/n), followers
+## | (v/n), followers_range (v/c), following (v/n), contributions (v/n), contributions_range (v/c), type (v/n), .egoID
+## | (e/n)
 ```
-
-
-
-
-
----
-class: center, middle
-# Visualization
-
-
----
-## Ego Network Visualization
---
-![](assignment_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -649,7 +654,7 @@ class: center, middle
 egos_data = egos$ego %&gt;%
              select(-.egoID,
                     -owner_id,
-                    -contributors,
+                    #-contributors,
                     -top_contributors,
                     -type, 
 *                   -net_transitivity,
@@ -722,6 +727,18 @@ egos_data = egos$ego %&gt;%
    &lt;td style="text-align:left;"&gt; 1.008e+02 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; 0.000e+00 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; 1.823e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; contributors &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.248e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.599e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.150e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.410e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.000e+01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.080e+02 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
@@ -813,7 +830,7 @@ regr.task = makeRegrTask(
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; n.feat.numerics &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; n.feat.factors &lt;/td&gt;
@@ -923,22 +940,22 @@ bmr = benchmark(learners = learners,
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.glm &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 10171 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10225 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.svm &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 13468 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13870 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.cforest &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 15140 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15221 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; egos_data &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; regr.nnet &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 21307 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 20242 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -968,66 +985,74 @@ model = train(
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 1.490e+04 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 6.620e+03 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 2.2507 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 2.760e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.540e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.885e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.2366 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.860e-02 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; * &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; size &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -1.646e-02 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 2.526e-02 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -0.6514 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 5.169e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.698e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.550e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.6662 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.076e-01 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; forks &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 2.875e+00 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 1.902e-01 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 15.1124 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 1.403e-23 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.882e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.933e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 14.9137 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.005e-23 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; *** &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; open_issues &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -1.646e+00 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 4.407e+00 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -0.3734 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 7.100e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.656e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.437e+00 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.3732 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7.101e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; contributors &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.373e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.758e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.2886 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7.737e-01 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; net_order &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -1.291e+01 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 5.183e+02 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -0.0249 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 9.802e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.365e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.804e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.2842 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7.771e-01 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; net_size &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -1.757e+02 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 4.373e+02 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -0.4017 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 6.891e-01 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.893e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4.427e+02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.4275 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.704e-01 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; net_density &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -1.030e+05 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 5.367e+04 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; -1.9200 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 5.899e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.023e+05 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5.408e+04 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.8920 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.275e-02 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; . &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; net_reciprocity &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; 1.693e+04 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 6.418e+03 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 2.6382 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 1.029e-02 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.461e+03 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.6205 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.082e-02 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; * &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -1037,11 +1062,22 @@ model = train(
 ---
 ## Hypothesis Testing Result
 
-&gt; There is some evidence to support rejecting the null hypothesis (p&lt;0.05) that repo's network properties are not good predictors of its popularity.
+&gt; There is some evidence to support rejecting the null hypothesis (p&lt;0.05) that the properties of a github contributors network are useful predictors of a repos's popularity, as measured by the repos 'Star rating'
+
 
 ---
 class: center, middle
-# END
+# Limitations of the study of the project
+
+
+---
+class: center, middle
+# Conclusions/Applications
+
+
+---
+class: center, middle
+# Questions
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
